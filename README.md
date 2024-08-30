@@ -1,5 +1,7 @@
 # Product Dashboard
 
+<https://product-dashboard-nu.vercel.app/>
+
 This is a React app that serves as a product dashboard. It provides a user-friendly interface for managing and monitoring products.
 
 ## Features
@@ -13,7 +15,7 @@ This is a React app that serves as a product dashboard. It provides a user-frien
 
 ## Installation
 
-1. Clone the repository: `git clone https://github.com/your-username/product-dashboard.git`
+1. Clone the repository: `git clone git@github.com:tanush-g/product-dashboard.git`
 2. Navigate to the project directory: `cd product-dashboard`
 3. Install dependencies: `npm install`
 
