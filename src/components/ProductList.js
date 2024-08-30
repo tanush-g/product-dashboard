@@ -17,6 +17,12 @@ import {
   Box,
   FormControl,
   InputLabel,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
+  Button,
 } from '@mui/material';
 
 const ProductList = ({ products }) => {
@@ -26,6 +32,8 @@ const ProductList = ({ products }) => {
   const [priceRange, setPriceRange] = useState('');
   const [popularityRange, setPopularityRange] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
+  const [selectedProduct, setSelectedProduct] = useState(null);
+  const [open, setOpen] = useState(false);
   const productsPerPage = 20;
 
   useEffect(() => {
@@ -90,6 +98,16 @@ const ProductList = ({ products }) => {
 
   const paginate = (event, value) => setCurrentPage(value);
 
+  const handleClickOpen = (product) => {
+    setSelectedProduct(product);
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+    setSelectedProduct(null);
+  };
+
   return (
     <Container>
       <Box my={4}>
@@ -146,9 +164,9 @@ const ProductList = ({ products }) => {
             <TableBody>
               {currentProducts.length > 0 ? (
                 currentProducts.map((product) => (
-                  <TableRow key={product.id}>
+                  <TableRow key={product.id} onClick={() => handleClickOpen(product)} style={{ cursor: 'pointer' }}>
                     <TableCell>
-                      <Link to={`/product/${product.id}`}>{product.title}</Link>
+                      <Link to="#" onClick={(e) => e.preventDefault()}>{product.title}</Link>
                     </TableCell>
                     <TableCell>{product.price}</TableCell>
                     <TableCell>{product.popularity}</TableCell>
@@ -171,6 +189,19 @@ const ProductList = ({ products }) => {
           />
         </Box>
       </Box>
+      <Dialog open={open} onClose={handleClose} aria-labelledby="product-dialog-title">
+        <DialogTitle id="product-dialog-title">{selectedProduct?.title}</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            <Typography variant="h6">Price: {selectedProduct?.price}</Typography>
+            <Typography variant="h6">Popularity: {selectedProduct?.popularity}</Typography>
+            <Typography variant="body1">Description: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam.</Typography>
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose} color="primary">Close</Button>
+        </DialogActions>
+      </Dialog>
     </Container>
   );
 };
