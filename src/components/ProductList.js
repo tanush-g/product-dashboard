@@ -1,9 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
 const ProductList = ({ products }) => {
   const [searchTerm, setSearchTerm] = useState('');
-  const [filteredProducts, setFilteredProducts] = useState(products);
+  const [filteredProducts, setFilteredProducts] = useState([]);
+
+  useEffect(() => {
+    console.log('Products received in ProductList:', products); // Debugging log
+    setFilteredProducts(products);
+  }, [products]);
 
   const handleSearch = (e) => {
     setSearchTerm(e.target.value);
@@ -31,15 +36,21 @@ const ProductList = ({ products }) => {
           </tr>
         </thead>
         <tbody>
-          {filteredProducts.map((product) => (
-            <tr key={product.id}>
-              <td>
-                <Link to={`/product/${product.id}`}>{product.title}</Link>
-              </td>
-              <td>{product.price}</td>
-              <td>{product.popularity}</td>
+          {Array.isArray(filteredProducts) && filteredProducts.length > 0 ? (
+            filteredProducts.map((product) => (
+              <tr key={product.id}>
+                <td>
+                  <Link to={`/product/${product.id}`}>{product.title}</Link>
+                </td>
+                <td>{product.price}</td>
+                <td>{product.popularity}</td>
+              </tr>
+            ))
+          ) : (
+            <tr>
+              <td colSpan="3">No products found</td>
             </tr>
-          ))}
+          )}
         </tbody>
       </table>
     </div>
