@@ -1,25 +1,39 @@
-import logo from './logo.svg';
+import React, { useEffect, useState } from 'react';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { fetchProducts } from './services/productService';
+import ProductList from './components/ProductList';
+import ProductDetails from './components/ProductDetails';
 import './App.css';
 
-function App() {
+const App = () => {
+  const [products, setProducts] = useState([]);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const getProducts = async () => {
+      try {
+        const data = await fetchProducts();
+        setProducts(data);
+      } catch (error) {
+        setError(error.message);
+      }
+    };
+    getProducts();
+  }, []);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <div className="App">
+        {error && <div className="error">{error}</div>}
+        <Switch>
+          <Route path="/" exact>
+            <ProductList products={products} />
+          </Route>
+          <Route path="/product/:id" component={ProductDetails} />
+        </Switch>
+      </div>
+    </Router>
   );
-}
+};
 
 export default App;
