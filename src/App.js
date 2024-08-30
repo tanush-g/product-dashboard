@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { CssBaseline, Container, CircularProgress, Typography, Box } from '@mui/material';
 import ProductList from './components/ProductList';
 import ProductDetails from './components/ProductDetails';
 import { fetchProducts } from './services/productService';
@@ -13,12 +14,10 @@ const App = () => {
     const getProducts = async () => {
       try {
         const data = await fetchProducts();
-        console.log('Fetched products:', data); // Debugging log
         const productsArray = Object.values(data.products); // Convert products object to array
         setProducts(productsArray);
         setLoading(false);
       } catch (err) {
-        console.error('Error fetching products:', err); // Debugging log
         setError(err.message);
         setLoading(false);
       }
@@ -27,11 +26,31 @@ const App = () => {
     getProducts();
   }, []);
 
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>Error: {error}</div>;
+  if (loading) {
+    return (
+      <Container>
+        <CssBaseline />
+        <Box display="flex" justifyContent="center" alignItems="center" height="100vh">
+          <CircularProgress />
+        </Box>
+      </Container>
+    );
+  }
+
+  if (error) {
+    return (
+      <Container>
+        <CssBaseline />
+        <Typography variant="h4" component="h1" gutterBottom>
+          Error: {error}
+        </Typography>
+      </Container>
+    );
+  }
 
   return (
     <Router>
+      <CssBaseline />
       <Routes>
         <Route path="/" element={<ProductList products={products} />} />
         <Route path="/product/:id" element={<ProductDetails products={products} />} />
